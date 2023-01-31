@@ -39,6 +39,27 @@ void Solve_433(int rssi, uint8_t *rx_buffer, uint8_t rx_len)
                 LOG_I("RF 433 heart is received from Master\r\n");
                 SW_led(3);
                 rf_433_Enqueue(Target_ID, 0, 1);
+                switch (Rx_message.Data)
+                {
+                case 0:
+                    Relay1_Close();
+                    Relay2_Close();
+                    break;
+                case 1:
+                    Relay1_Open();
+                    Relay2_Close();
+                    break;
+                case 2:
+                    Relay1_Close();
+                    Relay2_Open();
+                    break;
+                case 3:
+                    Relay1_Open();
+                    Relay2_Open();
+                    break;
+                default:
+                    break;
+                }
                 break;
             case 1: //按钮
                 LOG_I("RF 433 key is received from Master \r\n");
@@ -74,16 +95,16 @@ void Solve_433(int rssi, uint8_t *rx_buffer, uint8_t rx_len)
                 }
                 break;
             case 4: //Learn
-                        if (Rx_message.Data)
-                        {
-                            Flash_Master_Change(Rx_message.From_ID);
-                            Target_ID = Flash_Get_Master();
-                            transmitter_on();
-                            rt_thread_mdelay(100);
-                            SW_led(1);
-                            LOG_I("Successful pairing, Master ID of the slaver is %d\r\n", Rx_message.Data);
-                        }
-                        break;
+                if (Rx_message.Data)
+                {
+                    Flash_Master_Change(Rx_message.From_ID);
+                    Target_ID = Flash_Get_Master();
+                    transmitter_on();
+                    rt_thread_mdelay(100);
+                    SW_led(1);
+                    LOG_I("Successful pairing, Master ID of the slaver is %d\r\n", Rx_message.Data);
+                }
+                break;
             default:
                 break;
             }
