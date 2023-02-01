@@ -63,9 +63,9 @@ void Relay2_Open(void)
 
 void Relay2_Close(void)
 {
-    if (Relay2_Status == 0)
+    if (Relay2_Status == 1)
     {
-        Relay2_Status = 1;
+        Relay2_Status = 0;
         rt_pin_write(RELAY2, 0);
         LOG_I("Relay2 to Close \r\n");
     }
