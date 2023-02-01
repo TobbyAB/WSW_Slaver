@@ -38,8 +38,11 @@ void remote_control(void)
 }
 void Heart_timeout(void *parameter)
 {
+    LOG_D("Loss of heartbeat");
     psi_lost = 1;
     SW_led(1);
+    Relay1_Close();
+    Relay2_Close();
 }
 
 void work_callback(void *parameter)
